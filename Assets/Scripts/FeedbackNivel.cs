@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class FeedbackNivel : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class FeedbackNivel : MonoBehaviour
 
     public TMP_Text feedback_nivel;
     public TMP_Text texto_acertos;
+    public TMP_Text texto_botao;
 
     void Start()
     {
@@ -24,10 +26,33 @@ public class FeedbackNivel : MonoBehaviour
         if (EstadoQuiz.vidasRestantes > 0)
         {
             feedback_nivel.text = "Você passou de nível!";
+            texto_botao.text = "Voltar aos níveis";
+
+            if (EstadoQuiz.nivelAtual == 1 && EstadoQuiz.nivelDesbloqueado < 2)
+            {
+                EstadoQuiz.nivelDesbloqueado = 2;
+            }
+            else if (EstadoQuiz.nivelAtual == 2 && EstadoQuiz.nivelDesbloqueado < 3)
+            {
+                EstadoQuiz.nivelDesbloqueado = 3;
+            }
         }
         else
         {
             feedback_nivel.text = "Você perdeu!";
+            texto_botao.text = "Tentar novamente";
+        }
+    }
+
+    public void AcaoBotao()
+    {
+        if (EstadoQuiz.vidasRestantes > 0)
+        {
+            SceneManager.LoadScene("SceneDificuldade");
+        }
+        else
+        {
+            SceneManager.LoadScene("SceneJogo");
         }
     }
         

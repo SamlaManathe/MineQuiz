@@ -5,18 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class GerenciaCena : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void CarregarCena(string nomeDaCena)
     {
         SceneManager.LoadScene(nomeDaCena);
@@ -25,5 +13,17 @@ public class GerenciaCena : MonoBehaviour
     public void Sair()
     {
         Application.Quit();
+    }
+
+    public void JogarNivel(int nivel)
+    {
+        if (nivel > EstadoQuiz.nivelDesbloqueado)
+        {
+            Debug.Log("Esse nível ainda não foi desbloqueado!");
+            return;
+        }
+
+        EstadoQuiz.nivelAtual = nivel;
+        SceneManager.LoadScene("SceneJogo");
     }
 }
