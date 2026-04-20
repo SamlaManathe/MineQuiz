@@ -15,106 +15,150 @@ public class Questoes : MonoBehaviour
     public TMP_Text alternativa_c;
     public TMP_Text alternativa_d;
 
-    private int questao = 1;
+    private int questao = 0;
 
-    public void MudarQuestao()
-    {
-        questao++;
-    }
+    public Button botao_alternativa_a;
+    public Button botao_alternativa_b;
+    public Button botao_alternativa_c;
+    public Button botao_alternativa_d;
+
+    public GameObject coracao1;
+    public GameObject coracao2;
+    public GameObject coracao3;
 
     void Start()
     {
+        EstadoQuiz.acertos = 0;
+        EstadoQuiz.vidasRestantes = 3;
+
         perguntas.Add(new string[] {
-            "Qual nÌvel de experiÍncia È necess·rio para minerar diamante?",
-            "Qualquer nÌvel",
-            "Acima do nÌvel 50",
-            "Abaixo do nÌvel 16",
-            "Apenas no nÌvel 0"
+            "Qual n√≠vel de experi√™ncia √© necess√°rio para minerar diamante?",
+            "Qualquer n√≠vel", // correta
+            "Acima do n√≠vel 50",
+            "Abaixo do n√≠vel 16",
+            "Apenas no n√≠vel 0"
         });
 
         perguntas.Add(new string[] {
-            "Qual ferramenta È necess·ria para coletar obsidiana?",
+            "Qual ferramenta √© necess√°ria para coletar obsidiana?",
             "Qualquer ferramenta",
             "Picareta de ferro",
-            "Picareta de diamante",
+            "Picareta de diamante", // correta
             "Machado de diamante"
         });
 
         perguntas.Add(new string[] {
             "Qual a forma de ativar um portal do Nether?",
             "Lava",
-            "¡gua",
+            "√Ågua",
             "Isqueiro apenas",
-            "Qualquer fonte de fogo"
+            "Qualquer fonte de fogo" // correta
         });
 
         perguntas.Add(new string[] {
-            "Qual desses mobs dropam pÛlvora ao morrer?",
+            "Qual desses mobs dropam p√≥lvora ao morrer?",
             "Zumbi",
-            "Creeper",
+            "Creeper", //correta
             "Esqueleto",
             "Blaze"
         });
 
         perguntas.Add(new string[] {
-            "Quantos blocos de obsidiana s„o necess·rios (mÌnimo) para fazer um portal do Nether",
+            "Quantos blocos de obsidiana s√£o necess√°rios (m√≠nimo) para fazer um portal do Nether",
             "8",
-            "10",
+            "10", // correta
             "12",
             "14"
         });
+
+        botao_alternativa_a.onClick.RemoveAllListeners();
+        botao_alternativa_b.onClick.RemoveAllListeners();
+        botao_alternativa_c.onClick.RemoveAllListeners();
+        botao_alternativa_d.onClick.RemoveAllListeners();
+
+        botao_alternativa_a.onClick.AddListener(() => VerificarResposta(0));
+        botao_alternativa_b.onClick.AddListener(() => VerificarResposta(1));
+        botao_alternativa_c.onClick.AddListener(() => VerificarResposta(2));
+        botao_alternativa_d.onClick.AddListener(() => VerificarResposta(3));
+    
+        AtualizarCoracoes();
+        MostrarQuestao();
     }
 
-    void Update()
+    void MostrarQuestao()
     {
-        if (questao == 1)
+        if (questao < perguntas.Count)
         {
-            pergunta.text = perguntas[0][0];
-            alternativa_a.text = perguntas[0][1];
-            alternativa_b.text = perguntas[0][2];
-            alternativa_c.text = perguntas[0][3];
-            alternativa_d.text = perguntas[0][4];
+            pergunta.text = perguntas[questao][0];
+            alternativa_a.text = perguntas[questao][1];
+            alternativa_b.text = perguntas[questao][2];
+            alternativa_c.text = perguntas[questao][3];
+            alternativa_d.text = perguntas[questao][4];
         }
-
-        if (questao == 2)
-        {
-            pergunta.text = perguntas[1][0];
-            alternativa_a.text = perguntas[1][1];
-            alternativa_b.text = perguntas[1][2];
-            alternativa_c.text = perguntas[1][3];
-            alternativa_d.text = perguntas[1][4];
-        }
-
-        if (questao == 3)
-        {
-            pergunta.text = perguntas[2][0];
-            alternativa_a.text = perguntas[2][1];
-            alternativa_b.text = perguntas[2][2];
-            alternativa_c.text = perguntas[2][3];
-            alternativa_d.text = perguntas[2][4];
-        }
-
-        if (questao == 4)
-        {
-            pergunta.text = perguntas[3][0];
-            alternativa_a.text = perguntas[3][1];
-            alternativa_b.text = perguntas[3][2];
-            alternativa_c.text = perguntas[3][3];
-            alternativa_d.text = perguntas[3][4];
-        }
-
-        if (questao == 5)
-        {
-            pergunta.text = perguntas[4][0];
-            alternativa_a.text = perguntas[4][1];
-            alternativa_b.text = perguntas[4][2];
-            alternativa_c.text = perguntas[4][3];
-            alternativa_d.text = perguntas[4][4];
-        }
-
-        else if (questao > 5)
+        else
         {
             SceneManager.LoadScene("SceneFeedbackNivel");
         }
     }
+
+    void VerificarResposta(int alternativaEscolhida)
+    {
+        int alternativaCorreta = PegarIndiceRespostaCorreta();
+
+        if (alternativaEscolhida == alternativaCorreta)
+        {
+            EstadoQuiz.acertos++;
+            Debug.Log("Acertou!");
+        }
+        else
+        {
+            EstadoQuiz.vidasRestantes--;
+            AtualizarCoracoes();
+            Debug.Log("Errou!");
+        }
+
+        if (EstadoQuiz.vidasRestantes <= 0)
+        {
+            SceneManager.LoadScene("SceneFeedbackNivel");
+            return;
+        }
+
+        questao++;
+        MostrarQuestao();
+    }
+
+    void AtualizarCoracoes()
+    {
+        coracao1.SetActive(EstadoQuiz.vidasRestantes >= 1);
+        coracao2.SetActive(EstadoQuiz.vidasRestantes >= 2);
+        coracao3.SetActive(EstadoQuiz.vidasRestantes >= 3);
+    }
+
+    int PegarIndiceRespostaCorreta()
+    {
+        if (questao == 0)
+        {
+            return 0; // letra "a"
+        }
+        else if (questao == 1)
+        {
+            return 2; // letra "c"
+        }
+        else if (questao == 2)
+        {
+            return 3; // letra "d"
+        }
+        else if (questao == 3)
+        {
+            return 1; // letra "b"
+        }
+        else if (questao == 4)
+        {
+            return 1; // letra "b"
+        }
+
+        return -1; // Retorna -1 se n√£o encontrar uma resposta correta (caso de erro)
+    }
+
+
 }
