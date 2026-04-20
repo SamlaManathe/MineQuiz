@@ -17,6 +17,13 @@ public class Questoes : MonoBehaviour
 
     private int questao = 1;
 
+    public static int acertos = 0;
+
+    public Button botao_alternativa_a;
+    public Button botao_alternativa_b;
+    public Button botao_alternativa_c;
+    public Button botao_alternativa_d;
+
     public void MudarQuestao()
     {
         questao++;
@@ -24,45 +31,69 @@ public class Questoes : MonoBehaviour
 
     void Start()
     {
+        
         perguntas.Add(new string[] {
-            "Qual nível de experiência é necessário para minerar diamante?",
-            "Qualquer nível",
-            "Acima do nível 50",
-            "Abaixo do nível 16",
-            "Apenas no nível 0"
+            "Qual nï¿½vel de experiï¿½ncia ï¿½ necessï¿½rio para minerar diamante?",
+            "Qualquer nï¿½vel", // correta
+            "Acima do nï¿½vel 50",
+            "Abaixo do nï¿½vel 16",
+            "Apenas no nï¿½vel 0"
         });
 
         perguntas.Add(new string[] {
-            "Qual ferramenta é necessária para coletar obsidiana?",
+            "Qual ferramenta ï¿½ necessï¿½ria para coletar obsidiana?",
             "Qualquer ferramenta",
             "Picareta de ferro",
-            "Picareta de diamante",
+            "Picareta de diamante", // correta
             "Machado de diamante"
         });
 
         perguntas.Add(new string[] {
             "Qual a forma de ativar um portal do Nether?",
             "Lava",
-            "Água",
+            "ï¿½gua",
             "Isqueiro apenas",
-            "Qualquer fonte de fogo"
+            "Qualquer fonte de fogo" // correta
         });
 
         perguntas.Add(new string[] {
-            "Qual desses mobs dropam pólvora ao morrer?",
+            "Qual desses mobs dropam pï¿½lvora ao morrer?",
             "Zumbi",
-            "Creeper",
+            "Creeper", //correta
             "Esqueleto",
             "Blaze"
         });
 
         perguntas.Add(new string[] {
-            "Quantos blocos de obsidiana são necessários (mínimo) para fazer um portal do Nether",
+            "Quantos blocos de obsidiana sï¿½o necessï¿½rios (mï¿½nimo) para fazer um portal do Nether",
             "8",
-            "10",
+            "10", // correta
             "12",
             "14"
         });
+
+        if(questao == 1){
+            botao_alternativa_a.onClick.AddListener(AlternativaCorreta);
+
+        } else if(questao == 2){
+            botao_alternativa_c.onClick.AddListener(AlternativaCorreta);
+
+        } else if(questao == 3){
+            botao_alternativa_d.onClick.AddListener(AlternativaCorreta);
+
+        } else if(questao == 4){
+            botao_alternativa_b.onClick.AddListener(AlternativaCorreta);
+
+        } else if(questao == 5){
+            botao_alternativa_b.onClick.AddListener(AlternativaCorreta);
+        }
+    }
+
+    void AlternativaCorreta()
+    {
+        acertos = acertos + 1;
+        Debug.Log("Acertou!");
+        Debug.Log(acertos);
     }
 
     void Update()
