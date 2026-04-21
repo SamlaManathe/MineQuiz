@@ -15,4 +15,10 @@ public class EstadoQuiz : MonoBehaviour
     public static int nivelAtual = 1;
 
     public static int nivelDesbloqueado = 1;
+
+    public static int vidasNivel1 = 0;
+    public static int vidasNivel2 = 0;
+    public static int vidasNivel3 = 0;
+
+    public static int acertosTotal = 0;
 }

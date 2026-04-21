@@ -19,15 +19,40 @@ public class FeedbackNivel : MonoBehaviour
         Debug.Log("Vidas que chegaram no feedback: " + EstadoQuiz.vidasRestantes);
         Debug.Log("Acertos que chegaram no feedback: " + EstadoQuiz.acertos);
 
+        // SALVAR vidas por nível
+        if (EstadoQuiz.nivelAtual == 1)
+        {
+            EstadoQuiz.vidasNivel1 = EstadoQuiz.vidasRestantes;
+        }
+        else if (EstadoQuiz.nivelAtual == 2)
+        {
+            EstadoQuiz.vidasNivel2 = EstadoQuiz.vidasRestantes;
+        }
+        else if (EstadoQuiz.nivelAtual == 3)
+        {
+            EstadoQuiz.vidasNivel3 = EstadoQuiz.vidasRestantes;
+        }
+
+        // SOMAR acertos
+        EstadoQuiz.acertosTotal += EstadoQuiz.acertos;
+
         AtualizarCoracoes();
 
         texto_acertos.text = "Acertos: " + EstadoQuiz.acertos + "/5";
 
         if (EstadoQuiz.vidasRestantes > 0)
         {
-            feedback_nivel.text = "Você passou de nível!";
-            texto_botao.text = "Voltar aos níveis";
-
+            if(EstadoQuiz.nivelAtual < 3)
+            {
+                feedback_nivel.text = "Você passou de nível!";
+                texto_botao.text = "Próximo nível";
+            }
+            else if (EstadoQuiz.nivelAtual == 3)
+            {
+                feedback_nivel.text = "Você finalizou todos os níveis!";
+                texto_botao.text = "Feedback final";
+            }
+            
             if (EstadoQuiz.nivelAtual == 1 && EstadoQuiz.nivelDesbloqueado < 2)
             {
                 EstadoQuiz.nivelDesbloqueado = 2;
@@ -45,16 +70,24 @@ public class FeedbackNivel : MonoBehaviour
     }
 
     public void AcaoBotao()
+{
+    if (EstadoQuiz.vidasRestantes > 0)
     {
-        if (EstadoQuiz.vidasRestantes > 0)
+        if (EstadoQuiz.nivelAtual < 3)
         {
-            SceneManager.LoadScene("SceneDificuldade");
+            EstadoQuiz.nivelAtual++;
+            SceneManager.LoadScene("SceneJogo");
         }
         else
         {
-            SceneManager.LoadScene("SceneJogo");
+            SceneManager.LoadScene("SceneFeedbackFinal");
         }
     }
+    else
+    {
+        SceneManager.LoadScene("SceneJogo");
+    }
+}
         
     void AtualizarCoracoes()
     {
